@@ -26,14 +26,21 @@ app.use(keycloak.middleware());
 app.use(express.json());
 
 app.get('/protected',keycloak.protect(), (req, res) => {
+    res.render(res)
     res.json({ message: 'Vous êtes authentifié !' });
+});
+
+app.get('/logout', (req, res) => {
+    keycloak.logout(req, res, () => {
+        res.json({ message: 'Vous avez été déconnecté avec succès !' });
+    });
 });
 
 app.get('/', (req, res) => {
     res.json("Registre de personnes ! Choisissez le bon routage !");
 });
 
-app.get('/personnes', (req, res) => {
+app.get('/personnes',keycloak.protect(), (req, res) => {
     db.all("SELECT * FROM personnes", [], (err, rows) => {
         if (err) {
             res.status(400).json({ error: err.message });
@@ -56,6 +63,8 @@ app.get('/personnes/:id', (req, res) => {
         res.json({ message: "success", data: row });
     });
 });
+
+
 
 app.post('/personnes', (req, res) => {
     const nom = req.body.nom;
