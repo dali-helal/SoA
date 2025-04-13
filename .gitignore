@@ -3,3 +3,4 @@ tp2/node_modules/
 tp2/maBaseDeDonnees.sqlite
 tp2/package-lock.json
 tp-graphql/node_modules/
+grpc-tp/node_modules
